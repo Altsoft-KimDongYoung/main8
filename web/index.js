@@ -1,1 +1,1 @@
-console.log('Web Constants');
+console.log("Web Constants *******");
