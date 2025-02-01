@@ -65,4 +65,4 @@ jobs:
           echo "Creating PR for branch $BRANCH"
           gh pr create --title "공통 모듈 자동 업데이트" \
                        --body "소비자 레포에서 감지된 constants-repo 변경사항을 upstream 저장소에 반영합니다." \
-                       --base master --head $BRANCH
+                       --base main --head $BRANCH
