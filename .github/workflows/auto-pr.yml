@@ -29,12 +29,13 @@ jobs:
       - name: Check for changes in constants-repo
         id: check_changes
         run: |
-          if git diff --quiet --exit-code constants-repo/; then
+          # 이전 commit과 현재 commit 간의 변경사항을 확인합니다.
+          if git diff ${{ github.event.before }} ${{ github.event.after }} --quiet --exit-code constants-repo/; then
             echo "No changes in constants-repo."
-            echo "::set-output name=changes::false"
+            echo "changes=false" >> $GITHUB_OUTPUT
           else
             echo "Detected changes in constants-repo."
-            echo "::set-output name=changes::true"
+            echo "changes=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Create branch and push subtree if changes exist
