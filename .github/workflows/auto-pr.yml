@@ -1,0 +1,63 @@
+name: Auto PR for common-module changes
+
+on:
+  push:
+    paths:
+      - "constants-repo/**"
+
+jobs:
+  auto-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # 전체 커밋 이력을 가져옵니다.
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "Altsoft-KimDongYoung"
+          git config --global user.email "kim.dy@altsoft.kr"
+
+      - name: Add upstream remote if not exists
+        run: |
+          if ! git remote | grep -q upstream; then
+            git remote add upstream https://github.com/Altsoft-KimDongYoung/0131_constants.git
+          fi
+
+      - name: Check for changes in common-module
+        id: check_changes
+        run: |
+          if git diff --quiet --exit-code common-module/; then
+            echo "No changes in common-module."
+            echo "::set-output name=changes::false"
+          else
+            echo "Detected changes in common-module."
+            echo "::set-output name=changes::true"
+          fi
+
+      - name: Create branch and push subtree if changes exist
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          # 고유한 브랜치 이름 생성 (예: auto-common-module-타임스탬프)
+          BRANCH="auto-common-module-$(date +%s)"
+          echo "Creating branch $BRANCH"
+          git checkout -b $BRANCH
+          # --squash 옵션을 사용해 커밋 이력을 단순화합니다.
+          git subtree push --prefix=common-module upstream $BRANCH --squash
+
+      - name: Install GitHub CLI
+        if: steps.check_changes.outputs.changes == 'true'
+        run: sudo apt-get update && sudo apt-get install -y gh
+
+      - name: Create Pull Request using GitHub CLI
+        if: steps.check_changes.outputs.changes == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+        run: |
+          BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          echo "Creating PR for branch $BRANCH"
+          gh pr create --title "공통 모듈 자동 업데이트" \
+                       --body "소비자 레포에서 감지된 common-module 변경사항을 upstream 저장소에 반영합니다." \
+                       --base master --head $BRANCH
