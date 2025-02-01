@@ -20,8 +20,8 @@ jobs:
 
       - name: Set up Git
         run: |
-          git config --global user.name "Altsoft-KimDongYoung"
-          git config --global user.email "kim.dy@altsoft.kr"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Add upstream remote if not exists
         run: |
