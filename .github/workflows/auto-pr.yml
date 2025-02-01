@@ -17,6 +17,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0 # 전체 커밋 이력을 가져옵니다.
+          token: ${{ secrets.MY_TOKEN }} # PAT 사용
 
       - name: Set up Git
         run: |
