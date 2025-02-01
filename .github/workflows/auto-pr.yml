@@ -23,7 +23,7 @@ jobs:
       - name: Add upstream remote if not exists
         run: |
           if ! git remote | grep -q upstream; then
-            git remote add upstream https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/Altsoft-KimDongYoung/0131_constants.git
+            git remote add upstream https://x-access-token:${{ secrets.MY_TOKEN }}@github.com/Altsoft-KimDongYoung/0131_constants.git
           fi
 
       - name: Check for changes in constants-repo
@@ -46,7 +46,7 @@ jobs:
           echo "Creating branch $BRANCH"
           git checkout -b $BRANCH
           # --squash 옵션을 사용해 커밋 이력을 단순화합니다.
-          git subtree push --prefix=constants-repo https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/Altsoft-KimDongYoung/0131_constants.git $BRANCH
+          git subtree push --prefix=constants-repo https://x-access-token:${{ secrets.MY_TOKEN }}@github.com/Altsoft-KimDongYoung/0131_constants.git $BRANCH
 
       - name: Install GitHub CLI
         if: steps.check_changes.outputs.changes == 'true'
