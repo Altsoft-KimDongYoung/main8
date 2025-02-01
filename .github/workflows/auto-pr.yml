@@ -23,7 +23,7 @@ jobs:
       - name: Add upstream remote if not exists
         run: |
           if ! git remote | grep -q upstream; then
-            git remote add upstream https://github.com/Altsoft-KimDongYoung/0131_constants.git
+            git remote add upstream https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/Altsoft-KimDongYoung/0131_constants.git
           fi
 
       - name: Check for changes in constants-repo
