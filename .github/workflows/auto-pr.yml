@@ -5,6 +5,9 @@ on:
     paths:
       - "constants-repo/**"
 
+permissions:
+  contents: write
+
 jobs:
   auto-pr:
     runs-on: ubuntu-latest
